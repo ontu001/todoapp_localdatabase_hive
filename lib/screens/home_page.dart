@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,6 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  Box? todo;
+  @override
+  void initState() {
+    todo = Hive.box('todo');
+    super.initState();
+  }
+
   TextEditingController _addTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -45,8 +55,8 @@ class HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: SizedBox(
-              height: 50,
-              width: 150,
+              height: 40,
+              width: 250,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
@@ -55,10 +65,19 @@ class HomePageState extends State<HomePage> {
                     padding: EdgeInsets.all(16.0), // Button padding
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(12.0), // Button border radius
+                          BorderRadius.circular(8.0), // Button border radius
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      final userInput = _addTextController.text;
+                      await todo!.add(userInput);
+                      Fluttertoast.showToast(msg: "Note Added");
+                      _addTextController.clear();
+                    } catch (e) {
+                      Fluttertoast.showToast(msg: e.toString());
+                    }
+                  },
                   child: Text(
                     "Add Note",
                     style: TextStyle(
@@ -72,8 +91,20 @@ class HomePageState extends State<HomePage> {
           //main body for showing the notes
 
           Expanded(
-            child: Container(
-              color: Colors.amber,
+            child: ValueListenableBuilder(
+              valueListenable: Hive.box('todo').listenable(),
+              builder: (context, box, widget) {
+                return ListView.builder(
+                    itemCount: todo!.keys.toList().length,
+                    itemBuilder: (_, index) {
+                      return Card(
+                        elevation: 5,
+                        child: ListTile(
+                          title: Text(todo!.getAt(index).toString()),
+                        ),
+                      );
+                    });
+              },
             ),
           ),
         ]),

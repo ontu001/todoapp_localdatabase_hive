@@ -19,6 +19,7 @@ class HomePageState extends State<HomePage> {
   }
 
   TextEditingController _addTextController = TextEditingController();
+  TextEditingController _editTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +102,83 @@ class HomePageState extends State<HomePage> {
                         elevation: 5,
                         child: ListTile(
                           title: Text(todo!.getAt(index).toString()),
+                          trailing: SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                    onPressed: () async {
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) {
+                                            return Dialog(
+                                              child: SizedBox(
+                                                height: 180,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 10.0),
+                                                      padding:
+                                                          EdgeInsets.all(10.0),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      29.0),
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .white)),
+                                                      child: TextField(
+                                                        controller:
+                                                            _editTextController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          hintText:
+                                                              "Write here..",
+                                                          border:
+                                                              InputBorder.none,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 50,
+                                                    ),
+                                                    ElevatedButton(
+                                                        onPressed: ()  {
+                                                          final updatedData =
+                                                              _editTextController.text;
+                                                          todo!.putAt(index,
+                                                              updatedData);
+                                                          _editTextController
+                                                              .clear();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text("Update"))
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.blueAccent,
+                                    )),
+                                IconButton(
+                                    onPressed: () async {
+                                      await todo!.deleteAt(index);
+                                      Fluttertoast.showToast(msg: "Deleted");
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    )),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     });

@@ -5,6 +5,9 @@ import 'package:todoapp_localdatabase_hive/screens/home_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Box box = await Hive.openBox('todo');
+  
+
   runApp(Todo());
 }
 
@@ -13,8 +16,9 @@ class Todo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: "Todo App",
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.greenAccent,
+        scaffoldBackgroundColor: Colors.blueGrey,
       ),
       home: HomePage(),
     );

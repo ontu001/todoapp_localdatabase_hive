@@ -6,19 +6,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Box box = await Hive.openBox('todo');
-  
 
-  runApp(Todo());
+  runApp(MyToDo());
 }
 
-class Todo extends StatelessWidget {
+class MyToDo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Todo App",
+      title: 'ToDO App',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.blueGrey,
+        appBarTheme: AppBarTheme(
+          centerTitle: true,
+          elevation: 2,
+          
+        )
       ),
       home: HomePage(),
     );

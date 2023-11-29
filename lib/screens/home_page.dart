@@ -15,8 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  //create input field controller instance
   TextEditingController _InputController = TextEditingController();
   TextEditingController _editTextController = TextEditingController();
+
+
+  //load box from local machine
   Box? todo;
   @override
   void initState() {
@@ -27,9 +31,15 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      //appbar=============
       appBar: AppBar(
         title: Text("TODO"),
       ),
+
+
+
+      //body====================
       body: Padding(
           padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
           child: Column(
